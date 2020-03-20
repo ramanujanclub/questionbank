@@ -1,7 +1,7 @@
 package com.rc.questionbankservice.dao.impl;
 
 import com.rc.questionbankservice.dao.QuestionBankDao;
-import com.rc.questionbankservice.entity.QuestionBankEntity;
+import com.rc.questionbankservice.entity.QuestionEntity;
 import com.rc.questionbankservice.repository.QuestionBankRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,8 @@ public class QuestionBankDaoImpl implements QuestionBankDao {
     private QuestionBankRepository questionBankRepository;
 
     @Override
-    public QuestionBankEntity save(QuestionBankEntity questionBankEntity) {
+    public QuestionEntity save(QuestionEntity questionEntity) {
         log.info("Saving to database");
-        return questionBankRepository.save(questionBankEntity);
+        return questionBankRepository.save(questionEntity);
     }
 }

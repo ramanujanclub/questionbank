@@ -1,9 +1,9 @@
 package com.rc.questionbankservice.dao;
 
-import com.rc.questionbankservice.entity.QuestionBankEntity;
+import com.rc.questionbankservice.entity.QuestionEntity;
 
 public interface QuestionBankDao {
 
-    QuestionBankEntity save(QuestionBankEntity questionBankEntity);
+    QuestionEntity save(QuestionEntity questionEntity);
 
 }

@@ -39,7 +39,7 @@ public class QuestionBankController {
     @PostMapping(value = "upload")
     public ResponseEntity persistQuestions(@RequestBody QuestionBank questionBank) throws Exception {
 
-        log.info("Persisting questions: {}", questionBank.getQuestionText());
+        log.info("Persisting questions: {}", questionBank.getQuestionDescription());
         questionBankService.persistQuestion(questionBank);
         return new ResponseEntity<String>("Question saved successfully", HttpStatus.CREATED);
     }
