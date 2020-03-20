@@ -1,7 +1,6 @@
 package com.rc.questionbankservice.entity.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.rc.questionbankservice.domain.QuestionHint;
 import com.rc.questionbankservice.domain.QuestionMetaData;
 import com.rc.questionbankservice.util.QuestionBankUtils;
 import lombok.extern.slf4j.Slf4j;
