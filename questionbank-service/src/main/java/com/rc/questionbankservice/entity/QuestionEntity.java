@@ -1,6 +1,6 @@
 package com.rc.questionbankservice.entity;
 
-import com.rc.questionbankservice.domain.QuestionCorrectAnswers;
+import com.rc.questionbankservice.domain.QuestionCorrectAnswer;
 import com.rc.questionbankservice.domain.QuestionHint;
 import com.rc.questionbankservice.domain.QuestionMetaData;
 import com.rc.questionbankservice.domain.QuestionOptions;
@@ -42,7 +42,7 @@ public class QuestionEntity {
 
     @Column(name = "question_correct_answer", columnDefinition = "json")
     @Convert(converter= QuestionCorrectAnswersConverter.class)
-    private QuestionCorrectAnswers questionCorrectAnswer;
+    private QuestionCorrectAnswer questionCorrectAnswer;
 
     @Column(name = "question_complexity_level")
     private String questionComplexityLevel;

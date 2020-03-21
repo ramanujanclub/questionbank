@@ -1,18 +1,13 @@
 package com.rc.questionbankservice.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 
 @Data
-public class QuestionBank {
+public class Question {
+    private String id;
     private String questionDescription;
     private QuestionOptions questionOptions;
-    private QuestionCorrectAnswers questionCorrectAnswers;
+    private QuestionCorrectAnswer questionCorrectAnswer;
     private long chapterId;
     private long classId;
     private String questionComplexityLevel;
