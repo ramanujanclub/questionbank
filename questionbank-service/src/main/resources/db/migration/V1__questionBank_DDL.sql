@@ -1,5 +1,13 @@
 -- Create Chapter Table
 
+CREATE TABLE parent_question (
+  id VARCHAR(50) NOT NULL,
+  question_description VARCHAR(800) NOT NULL,
+  question_category VARCHAR(45) NULL,
+  img_location VARCHAR(250) NULL,
+  PRIMARY KEY (id))
+COMMENT = 'Parent question table';
+
 CREATE TABLE if NOT EXISTS chapter (
   id int(11) NOT NULL,
   chapter_name varchar(150) NOT NULL,
@@ -35,3 +43,5 @@ CREATE TABLE if NOT EXISTS question (
   CONSTRAINT question_chapter_id FOREIGN KEY (chapter_id) REFERENCES chapter (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT question_class_id FOREIGN KEY (class_id) REFERENCES class (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Main table keep details about question';
+
+
