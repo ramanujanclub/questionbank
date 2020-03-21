@@ -14,4 +14,5 @@ INSERT INTO chapter (id,chapter_name,description) VALUES(1,'Addition','Addition'
 INSERT INTO chapter (id,chapter_name,description) VALUES(2,'Subtraction','Subtraction');
 INSERT INTO chapter (id,chapter_name,description) VALUES(3,'Division','Division');
 
+-- End of file
 commit;
