@@ -1,6 +1,6 @@
 package com.rc.questionbankservice.controller;
 
-import com.rc.questionbankservice.domain.QuestionBank;
+import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.service.QuestionBankService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -8,11 +8,19 @@ import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/questionbank")
+@RequestMapping(value = "/api/v1/questionbank", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 @AllArgsConstructor
 public class QuestionBankController {
@@ -30,17 +38,40 @@ public class QuestionBankController {
      *
      * @return the response entity
      */
-    @ApiOperation(value = "Endpoint to persist questions.",
+    @ApiOperation(value = "Endpoint to persist question.",
             produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Questions have been saved successfully"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PostMapping(value = "upload")
-    public ResponseEntity persistQuestions(@RequestBody QuestionBank questionBank) throws Exception {
+    public ResponseEntity<Question> persistQuestions(@RequestBody Question question) {
+        log.info("Persisting questions: {}", question.getQuestionDescription());
+        Question questionResult = questionBankService.persistQuestion(question);
+        return new ResponseEntity<>(questionResult, HttpStatus.CREATED);
+    }
 
-        log.info("Persisting questions: {}", questionBank.getQuestionDescription());
-        questionBankService.persistQuestion(questionBank);
-        return new ResponseEntity<String>("Question saved successfully", HttpStatus.CREATED);
+    /**
+     *
+     * @param questionId
+     * @return
+     */
+    @GetMapping("questions/{questionId}")
+    public ResponseEntity<Question> findQuestion(@PathVariable String questionId) {
+
+        log.info("Searching question by questionId : {}", questionId);
+        Question question = questionBankService.findQuestionById(questionId);
+        return new ResponseEntity<>(question, HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @GetMapping("questions")
+    public ResponseEntity<List<Question>> getQuestionBank() {
+        log.info("Getting complete question bank:");
+        List<Question> questions = questionBankService.getAllQuestions();
+        return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 }
