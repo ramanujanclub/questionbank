@@ -21,12 +21,13 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity (name = "question")
+@Entity(name = "question")
 @TypeDef(name = "json", typeClass = JsonBinaryType.class)
 public class QuestionEntity {
 
@@ -36,27 +37,38 @@ public class QuestionEntity {
     @Column(name = "question_description")
     private String questionDescription;
 
+    @Column(name = "question_header")
+    private String questionHeader;
+
+    @Column(name = "question_description_image", columnDefinition = "mediumblob")
+    @Lob
+    private byte[] questionDescriptionImage;
+
+    @Column(name = "scanned_question_file", columnDefinition = "mediumblob")
+    @Lob
+    private byte[] scannedQuestionFile;
+
     @Column(name = "question_options", columnDefinition = "json")
-    @Convert(converter= QuestionOptionsConverter.class)
+    @Convert(converter = QuestionOptionsConverter.class)
     private QuestionOptions questionOptions;
 
     @Column(name = "question_correct_answer", columnDefinition = "json")
-    @Convert(converter= QuestionCorrectAnswersConverter.class)
+    @Convert(converter = QuestionCorrectAnswersConverter.class)
     private QuestionCorrectAnswer questionCorrectAnswer;
 
     @Column(name = "question_complexity_level")
     private String questionComplexityLevel;
 
     @Column(name = "question_metadata", columnDefinition = "json")
-    @Convert(converter= QuestionMetaDataConverter.class)
+    @Convert(converter = QuestionMetaDataConverter.class)
     private QuestionMetaData questionMetadata;
 
     @Column(name = "question_owner_details", columnDefinition = "json")
-    @Convert(converter= QuestionOwnerDetailsConverter.class)
+    @Convert(converter = QuestionOwnerDetailsConverter.class)
     private QuestionOwnerDetails questionOwnerDetails;
 
     @Column(name = "question_hint", columnDefinition = "json")
-    @Convert(converter= QuestionHintConverter.class)
+    @Convert(converter = QuestionHintConverter.class)
     private QuestionHint questionHint;
 
     @Column(name = "class_id")
@@ -64,5 +76,4 @@ public class QuestionEntity {
 
     @Column(name = "chapter_id")
     private long chapterId;
-
 }
