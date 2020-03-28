@@ -1,0 +1,58 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Ramanujan Club</title>
+
+</head>
+
+<body>
+
+<main role="main" class="container">
+
+    <!--<div class="starter-template">
+        <h2>
+            <span th:text="'Hello, ' + ${question.getQuestionDescription()}"></span>
+        </h2>
+    </div>-->
+
+    <div>
+
+    </div>
+
+
+    <table style="width: 100%">
+        <tr th:if="${question.getQuestionHeader() != ''}">
+            <td style="text-align: center">
+                <h2><span th:text="${question.getQuestionHeader()}"></span></h2>
+            </td>
+        </tr>
+        <tr th:if="${question.getQuestionDescription() != ''}">
+            <td>
+                <h3><span th:text="${question.getQuestionDescription()}"></span></h3>
+            </td>
+        </tr>
+        <tr th:unless="${question.getQuestionDescription() != ''}">
+            <td style="zoom:30%">
+                <img th:src="${pic} == null ? _ : @{'data:image/png;base64,'+${pic}}">
+            </td>
+        </tr>
+        <tr>
+            <td style="zoom:30%">
+                <img th:src="${questionContent} == null ? _ : @{'data:image/png;base64,'+${questionContent}}">
+            </td>
+        </tr>
+        <br>
+        <tr th:each="option : ${question.getQuestionOptions()}">
+            <td th:text="${option}"></td>
+        </tr>
+
+    </table>
+
+</main>
+<!-- /.container -->
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+</body>
+</html>
