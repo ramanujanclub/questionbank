@@ -44,7 +44,7 @@ public class TestController {
 
         log.info("Searching question by questionId : {}", questionId);
         Question question = questionBankService.findQuestionById(questionId);
-        byte[] imageBytes = question.getScannedQuestionFile();
+        byte[] imageBytes = question.getScannedQuestionImage();
         ModelAndView mav = new ModelAndView("generatedQuestion");
         mav.addObject("question", question);
         mav.addObject("pic", Base64.getEncoder().encodeToString(imageBytes));

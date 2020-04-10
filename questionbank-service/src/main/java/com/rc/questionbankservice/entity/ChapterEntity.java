@@ -16,14 +16,14 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "class")
-public class ClassEntity {
+@Entity(name = "chapter")
+public class ChapterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long classId;
+    private long chaperId;
 
     @Column
-    private String className;
+    private String chapterName;
 
     @Column
     private String description;

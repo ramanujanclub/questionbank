@@ -1,11 +1,9 @@
 package com.rc.questionbankservice.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,18 +14,16 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "parent_question")
-@TypeDef(name = "json", typeClass = JsonBinaryType.class)
-public class ParentQuestion {
+public class ParentQuestionEntity {
 
     @Id
-    private String id;
+    @Column(name = "parentquestionid")
+    private String parentQuestionId;
 
-    @Column(name = "question_description")
+    @Column(name = "questiondescription")
     private String questionDescription;
 
-    @Column(name = "question_category")
+    @Column(name = "questioncategory")
     private String questionCategory;
 
-    @Column(name = "img_location")
-    private String imgLocation;
 }

@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class Question {
-    private String id;
+    private String questionId;
     private String questionDescription;
     private String questionHeader;
     private byte[] questionDescriptionImage;
-    private byte[] scannedQuestionFile;
+    private byte[] scannedQuestionImage;
     private QuestionOptions questionOptions;
     private QuestionCorrectAnswer questionCorrectAnswer;
     private long chapterId;
@@ -18,13 +18,13 @@ public class Question {
     private QuestionOwnerDetails questionOwnerDetails;
     private QuestionHint questionHint;
 
-
-/*    public static void main(String[] args) {
+/*
+    public static void main(String[] args) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             Question questionBank = new Question();
-            questionBank.setQuestionHeader("This is header");
-            questionBank.setQuestionDescription("This is description");
+            questionBank.setQuestionHeader("Memory Stick");
+            questionBank.setQuestionDescription("This is question description");
             questionBank.setChapterId(1);
             questionBank.setClassId(1);
             questionBank.setQuestionComplexityLevel("Direct");
@@ -63,6 +63,6 @@ public class Question {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-    }*/
-
+    }
+*/
 }

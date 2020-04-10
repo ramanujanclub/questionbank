@@ -4,12 +4,10 @@ import com.rc.questionbankservice.domain.QuestionCorrectAnswer;
 import com.rc.questionbankservice.domain.QuestionHint;
 import com.rc.questionbankservice.domain.QuestionMetaData;
 import com.rc.questionbankservice.domain.QuestionOptions;
-import com.rc.questionbankservice.domain.QuestionOwnerDetails;
 import com.rc.questionbankservice.entity.converter.QuestionCorrectAnswersConverter;
 import com.rc.questionbankservice.entity.converter.QuestionHintConverter;
 import com.rc.questionbankservice.entity.converter.QuestionMetaDataConverter;
 import com.rc.questionbankservice.entity.converter.QuestionOptionsConverter;
-import com.rc.questionbankservice.entity.converter.QuestionOwnerDetailsConverter;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +19,6 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 @Builder
 @Data
@@ -32,48 +29,37 @@ import javax.persistence.Lob;
 public class QuestionEntity {
 
     @Id
-    private String id;
+    @Column(name = "questionid")
+    private String questionId;
 
-    @Column(name = "question_description")
+    @Column(name = "questiondescription")
     private String questionDescription;
 
-    @Column(name = "question_header")
+    @Column(name = "questionheader")
     private String questionHeader;
 
-    @Column(name = "question_description_image", columnDefinition = "mediumblob")
-    @Lob
-    private byte[] questionDescriptionImage;
-
-    @Column(name = "scanned_question_file", columnDefinition = "mediumblob")
-    @Lob
-    private byte[] scannedQuestionFile;
-
-    @Column(name = "question_options", columnDefinition = "json")
+    @Column(name = "questionoptions", columnDefinition = "json")
     @Convert(converter = QuestionOptionsConverter.class)
     private QuestionOptions questionOptions;
 
-    @Column(name = "question_correct_answer", columnDefinition = "json")
+    @Column(name = "questioncorrectanswer", columnDefinition = "json")
     @Convert(converter = QuestionCorrectAnswersConverter.class)
     private QuestionCorrectAnswer questionCorrectAnswer;
 
-    @Column(name = "question_complexity_level")
+    @Column(name = "questioncomplexitylevel")
     private String questionComplexityLevel;
 
-    @Column(name = "question_metadata", columnDefinition = "json")
+    @Column(name = "questionmetadata", columnDefinition = "json")
     @Convert(converter = QuestionMetaDataConverter.class)
     private QuestionMetaData questionMetadata;
 
-    @Column(name = "question_owner_details", columnDefinition = "json")
-    @Convert(converter = QuestionOwnerDetailsConverter.class)
-    private QuestionOwnerDetails questionOwnerDetails;
-
-    @Column(name = "question_hint", columnDefinition = "json")
+    @Column(name = "questionhint", columnDefinition = "json")
     @Convert(converter = QuestionHintConverter.class)
     private QuestionHint questionHint;
 
-    @Column(name = "class_id")
+    @Column(name = "classid")
     private long classId;
 
-    @Column(name = "chapter_id")
+    @Column(name = "chapterid")
     private long chapterId;
 }

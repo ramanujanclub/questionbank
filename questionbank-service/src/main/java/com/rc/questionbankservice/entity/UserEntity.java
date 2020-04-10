@@ -8,23 +8,26 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "class")
-public class ClassEntity {
+@Entity(name = "user")
+public class UserEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long classId;
+    @Column(name = "userId")
+    private String userId;
 
-    @Column
-    private String className;
+    @Column(name = "userName")
+    private String userName;
 
-    @Column
-    private String description;
+    @Column(name = "emailId")
+    private String emailId;
+
+    @Column(name = "mobile")
+    private String mobile;
+
 }

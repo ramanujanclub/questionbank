@@ -1,6 +1,7 @@
 package com.rc.questionbankservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.service.QuestionBankService;
 import io.swagger.annotations.ApiOperation;
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +30,7 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/questionbank", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 @AllArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class QuestionBankController {
 
     private QuestionBankService questionBankService;
@@ -71,6 +75,22 @@ public class QuestionBankController {
         log.info("Searching question by questionId : {}", questionId);
         Question question = questionBankService.findQuestionById(questionId);
         return new ResponseEntity<>(question, HttpStatus.OK);
+    }
+
+    @PostMapping("questions/question")
+    public ResponseEntity<Question> postNewQuestion(@RequestBody Question questionRequest) {
+
+        log.info("Add new question questionId : {}", questionRequest);
+        Question question = questionBankService.persistQuestion(questionRequest,null, null);
+        return new ResponseEntity<>(question, HttpStatus.CREATED);
+    }
+
+    @PostMapping("questions/parentquestion")
+    public ResponseEntity<ParentQuestion> postNewParentQuestion(@RequestBody ParentQuestion parentQuestionRequest) {
+
+        log.info("Add new parentQuestion  : {}", parentQuestionRequest);
+        ParentQuestion newParentQuestion = questionBankService.persistNewParentQuestion(parentQuestionRequest);
+        return new ResponseEntity<>(newParentQuestion, HttpStatus.CREATED);
     }
 
     /**
