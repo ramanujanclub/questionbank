@@ -15,10 +15,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Builder
 @Data
@@ -62,4 +65,15 @@ public class QuestionEntity {
 
     @Column(name = "chapterid")
     private long chapterId;
+
+    @Column(name = "questionnote")
+    private String questionNote;
+
+    @Column(name = "parentquestionid")
+    private String parentQuestionId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "questionstatusid", referencedColumnName = "questionstatusid")
+    private QuestionStatusEntity questionStatusEntity;
+
 }
