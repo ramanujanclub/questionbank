@@ -5,8 +5,10 @@ import lombok.Data;
 @Data
 public class Question {
     private String questionId;
+    private String parentQuestionId;
     private String questionDescription;
     private String questionHeader;
+    private String questionNote;
     private byte[] questionDescriptionImage;
     private byte[] scannedQuestionImage;
     private QuestionOptions questionOptions;

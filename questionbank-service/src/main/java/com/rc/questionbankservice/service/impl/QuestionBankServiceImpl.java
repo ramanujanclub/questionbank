@@ -10,6 +10,7 @@ import com.rc.questionbankservice.domain.QuestionOwnerDetails;
 import com.rc.questionbankservice.entity.ImageEntity;
 import com.rc.questionbankservice.entity.ParentQuestionEntity;
 import com.rc.questionbankservice.entity.QuestionEntity;
+import com.rc.questionbankservice.entity.QuestionStatusEntity;
 import com.rc.questionbankservice.exception.QuestionUploadImageException;
 import com.rc.questionbankservice.service.QuestionBankService;
 import com.rc.questionbankservice.util.ModelMapperUtils;
@@ -44,6 +45,11 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         QuestionEntity questionEntity = modelMapper.map(question, QuestionEntity.class);
         questionEntity.setQuestionId(UUID.randomUUID().toString());
+
+        QuestionStatusEntity statusEntity = new QuestionStatusEntity();
+        statusEntity.setSubmittedByUserId("aniwesh");
+        questionEntity.setQuestionStatusEntity(statusEntity);
+
         questionEntity = questionBankDao.save(questionEntity);
 
         saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile);

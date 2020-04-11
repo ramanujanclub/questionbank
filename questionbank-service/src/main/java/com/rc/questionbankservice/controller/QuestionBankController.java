@@ -79,7 +79,6 @@ public class QuestionBankController {
 
     @PostMapping("questions/question")
     public ResponseEntity<Question> postNewQuestion(@RequestBody Question questionRequest) {
-
         log.info("Add new question questionId : {}", questionRequest);
         Question question = questionBankService.persistQuestion(questionRequest,null, null);
         return new ResponseEntity<>(question, HttpStatus.CREATED);
