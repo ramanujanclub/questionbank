@@ -19,6 +19,7 @@ public class Question {
     private QuestionMetaData questionMetadata;
     private QuestionOwnerDetails questionOwnerDetails;
     private QuestionHint questionHint;
+    private QuestionStatus questionStatus;
 
 /*
     public static void main(String[] args) {

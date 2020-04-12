@@ -18,7 +18,7 @@ public class QuestionStatusDaoImpl implements QuestionStatusDao {
 
     @Override
     public QuestionStatusEntity save(QuestionStatusEntity questionStatusEntity) {
-        log.info("Saving to database");
+        log.info("Saving QuestionStatusEntity to database");
         return questionStatusRepository.save(questionStatusEntity);
     }
 

@@ -1,8 +1,10 @@
 package com.rc.questionbankservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rc.questionbankservice.domain.ApproveQuestionRequest;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
+import com.rc.questionbankservice.domain.VerifyQuestionRequest;
 import com.rc.questionbankservice.service.QuestionBankService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +36,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:4200"})
 public class QuestionBankController {
 
+    @Autowired
     private QuestionBankService questionBankService;
 
     @Autowired
@@ -69,6 +73,13 @@ public class QuestionBankController {
      * @param questionId
      * @return
      */
+    @ApiOperation(value = "Endpoint to find question.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question as response."),
+            @ApiResponse(code = 500, message = "Internal Server Error."),
+            @ApiResponse(code = 404, message = "Question not found.")
+    })
     @GetMapping("questions/{questionId}")
     public ResponseEntity<Question> findQuestion(@PathVariable String questionId) {
 
@@ -90,6 +101,47 @@ public class QuestionBankController {
         log.info("Add new parentQuestion  : {}", parentQuestionRequest);
         ParentQuestion newParentQuestion = questionBankService.persistNewParentQuestion(parentQuestionRequest);
         return new ResponseEntity<>(newParentQuestion, HttpStatus.CREATED);
+    }
+
+
+    @ApiOperation(value = "Endpoint to mark question as verified.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question has been marked as verified."),
+            @ApiResponse(code = 500, message = "Internal Server Error."),
+            @ApiResponse(code = 404, message = "Question not found.")
+    })
+    @PatchMapping("questions/{questionId}/verify")
+    public ResponseEntity<String> markQuestionAsVerified(@PathVariable String questionId,
+                                                   @RequestBody VerifyQuestionRequest verifyQuestionRequest) {
+
+        log.info("Mark question as verified request received for questionId [{}] by userId: {}", questionId,
+                verifyQuestionRequest.getVerifiedByUserId());
+        questionBankService.markQuestionAsVerified(questionId, verifyQuestionRequest);
+        return new ResponseEntity<>("Question marked as verified.", HttpStatus.OK);
+    }
+
+
+    /**
+     *
+     * @param questionId
+     * @return
+     */
+    @ApiOperation(value = "Endpoint to mark question as approved.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question has been marked as approved."),
+            @ApiResponse(code = 500, message = "Internal Server Error."),
+            @ApiResponse(code = 404, message = "Question not found.")
+    })
+    @PatchMapping("questions/{questionId}/approve")
+    public ResponseEntity<String> markQuestionAsApproved(@PathVariable String questionId,
+                                                    @RequestBody ApproveQuestionRequest approveQuestionRequest) {
+
+        log.info("Mark question as approved request received for questionId [{}] by userId: {}", questionId,
+                approveQuestionRequest.getApproveByUserId());
+        questionBankService.markQuestionAsApproved(questionId, approveQuestionRequest);
+        return new ResponseEntity<>("Question has been marked as approved.", HttpStatus.OK);
     }
 
     /**
