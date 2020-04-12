@@ -5,6 +5,7 @@ import com.rc.questionbankservice.domain.ApproveQuestionRequest;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.domain.VerifyQuestionRequest;
+import com.rc.questionbankservice.service.QuestionBankSearchService;
 import com.rc.questionbankservice.service.QuestionBankService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -41,6 +42,9 @@ public class QuestionBankController {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    QuestionBankSearchService questionBankSearchService;
 
     @GetMapping("health")
     public ResponseEntity checkHealth() {
@@ -144,6 +148,12 @@ public class QuestionBankController {
         return new ResponseEntity<>("Question has been marked as approved.", HttpStatus.OK);
     }
 
+    @GetMapping("questions/search")
+    public ResponseEntity<List<Question>> searchQuestions(@RequestParam(value = "classId") long classId) {
+        log.info("Request received for questionSearch for classIds : [{}] ", classId);
+        List<Question> matchedQuestions = questionBankSearchService.searchQuestionsByClassId(classId);
+        return new ResponseEntity<>(matchedQuestions, HttpStatus.OK);
+    }
     /**
      *
      * @return

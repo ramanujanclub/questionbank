@@ -17,7 +17,6 @@ public class Question {
     private long classId;
     private String questionComplexityLevel;
     private QuestionMetaData questionMetadata;
-    private QuestionOwnerDetails questionOwnerDetails;
     private QuestionHint questionHint;
     private QuestionStatus questionStatus;
 

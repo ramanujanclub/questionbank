@@ -12,4 +12,7 @@ public interface QuestionBankDao {
 
     QuestionEntity findQuestionById(String questionId);
 
+    List<QuestionEntity> findQuestionByClassIds(List<Integer> classIds);
+    List<QuestionEntity> findAllQuestionsByClassId(long classIds);
+
 }
