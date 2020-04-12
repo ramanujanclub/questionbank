@@ -7,7 +7,6 @@ import com.rc.questionbankservice.dao.QuestionStatusDao;
 import com.rc.questionbankservice.domain.ApproveQuestionRequest;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
-import com.rc.questionbankservice.domain.QuestionStatus;
 import com.rc.questionbankservice.domain.VerifyQuestionRequest;
 import com.rc.questionbankservice.entity.ImageEntity;
 import com.rc.questionbankservice.entity.ParentQuestionEntity;
@@ -16,6 +15,7 @@ import com.rc.questionbankservice.entity.QuestionStatusEntity;
 import com.rc.questionbankservice.exception.QuestionUploadImageException;
 import com.rc.questionbankservice.service.QuestionBankService;
 import com.rc.questionbankservice.util.ModelMapperUtils;
+import com.rc.questionbankservice.util.QuestionBankUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +60,7 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         questionEntity = questionBankDao.save(questionEntity);
         saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile);
         Question savedQuestion = ModelMapperUtils.map(questionEntity, Question.class);
-        convertQuestionStatusEntityToQuestionStatus(questionEntity, savedQuestion);
+        QuestionBankUtils.convertQuestionStatusEntityToQuestionStatus(questionEntity, savedQuestion);
         log.info("Question Saved : " + questionEntity);
         return savedQuestion;
     }
@@ -110,14 +110,9 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         log.debug("Searching question by questionId : [{}]", questionId);
         QuestionEntity questionEntity = questionBankDao.findQuestionById(questionId);
         Question question = ModelMapperUtils.map(questionEntity, Question.class);
-        convertQuestionStatusEntityToQuestionStatus(questionEntity, question);
+        QuestionBankUtils.convertQuestionStatusEntityToQuestionStatus(questionEntity, question);
         log.info("Found question for questionId : [{}]", questionId);
         return question;
-    }
-
-    private void convertQuestionStatusEntityToQuestionStatus(QuestionEntity questionEntity, Question question) {
-        QuestionStatus questionStatus = ModelMapperUtils.map(questionEntity.getQuestionStatusEntity(), QuestionStatus.class);
-        question.setQuestionStatus(questionStatus);
     }
 
     @Override

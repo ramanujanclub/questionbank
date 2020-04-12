@@ -39,4 +39,16 @@ public class QuestionBankDaoImpl implements QuestionBankDao {
         }
         throw new QuestionNotFoundException("Question Not found",questionId);
     }
+
+    @Override
+    public List<QuestionEntity> findQuestionByClassIds(List<Integer> classIds) {
+        log.debug("Searching question for classes. classIds [{}] ", classIds);
+        return questionBankRepository.findByClassIdIn(classIds);
+    }
+
+    @Override
+    public List<QuestionEntity> findAllQuestionsByClassId(long classId) {
+        log.debug("Searching question for classId [{}] ", classId);
+        return questionBankRepository.findByClassId(classId);
+    }
 }
