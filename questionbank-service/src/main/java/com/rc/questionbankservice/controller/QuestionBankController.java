@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rc.questionbankservice.domain.ApproveQuestionRequest;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
+import com.rc.questionbankservice.domain.SearchQuestionRequest;
 import com.rc.questionbankservice.domain.VerifyQuestionRequest;
 import com.rc.questionbankservice.service.QuestionBankSearchService;
 import com.rc.questionbankservice.service.QuestionBankService;
@@ -148,10 +149,11 @@ public class QuestionBankController {
         return new ResponseEntity<>("Question has been marked as approved.", HttpStatus.OK);
     }
 
-    @GetMapping("questions/search")
-    public ResponseEntity<List<Question>> searchQuestions(@RequestParam(value = "classId") long classId) {
-        log.info("Request received for questionSearch for classIds : [{}] ", classId);
-        List<Question> matchedQuestions = questionBankSearchService.searchQuestionsByClassId(classId);
+    @PostMapping("questions/search")
+    public ResponseEntity<List<Question>> searchQuestions(@RequestBody SearchQuestionRequest searchQuestionRequest) {
+        log.info("Request received for questionSearch for classIds : [{}] ",
+                searchQuestionRequest.getQuestionSearchQuery().getClassId());
+        List<Question> matchedQuestions = questionBankSearchService.searchQuestionsByClassId(searchQuestionRequest.getQuestionSearchQuery().getClassId());
         return new ResponseEntity<>(matchedQuestions, HttpStatus.OK);
     }
     /**
