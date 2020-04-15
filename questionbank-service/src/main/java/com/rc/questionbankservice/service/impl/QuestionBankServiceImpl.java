@@ -119,6 +119,10 @@ public class QuestionBankServiceImpl implements QuestionBankService {
     public ParentQuestion persistNewParentQuestion(ParentQuestion parentQuestion) {
         ParentQuestionEntity newParentQuestionEntity = ModelMapperUtils.map(parentQuestion, ParentQuestionEntity.class);
         newParentQuestionEntity.setParentQuestionId(UUID.randomUUID().toString());
+        QuestionStatusEntity statusEntity = new QuestionStatusEntity();
+        // TODO This will be populated from logged user details
+        statusEntity.setSubmittedByUserId("aniwesh");
+        newParentQuestionEntity.setQuestionStatusEntity(statusEntity);
         parentQuestionDao.save(newParentQuestionEntity);
         parentQuestion.setParentQuestionId(newParentQuestionEntity.getParentQuestionId());
         return parentQuestion;

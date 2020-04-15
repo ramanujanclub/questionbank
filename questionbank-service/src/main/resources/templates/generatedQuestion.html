@@ -30,12 +30,18 @@
         </tr>
         <tr th:if="${question.getQuestionDescription() != ''}">
             <td>
-                <h3><span th:text="${question.getQuestionDescription()}"></span></h3>
+                <h3>Question Description: <span th:text="${question.getQuestionDescription()}"></span></h3>
             </td>
         </tr>
         <tr th:unless="${question.getQuestionDescription() != ''}">
-            <td style="zoom:30%">
+            <td style="zoom:50%">
                 <img th:src="${pic} == null ? _ : @{'data:image/png;base64,'+${pic}}">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <h3>Question Answer: <span th:text="${question.getQuestionCorrectAnswer().getCorrectAnswers()[0].getAnswerKey()}"></span><span>) </span><span th:text="${question.getQuestionCorrectAnswer().getCorrectAnswers()[0].getAnswerValue()}"></span></h3>
             </td>
         </tr>
         <tr>
@@ -44,9 +50,6 @@
             </td>
         </tr>
         <br>
-        <tr th:each="option : ${question.getQuestionOptions()}">
-            <td th:text="${option}"></td>
-        </tr>
 
     </table>
 
