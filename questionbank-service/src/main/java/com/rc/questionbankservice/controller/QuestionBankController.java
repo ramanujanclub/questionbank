@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +37,9 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:4200"})
 public class QuestionBankController {
 
-    @Autowired
     private QuestionBankService questionBankService;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    QuestionBankSearchService questionBankSearchService;
+    private QuestionBankSearchService questionBankSearchService;
 
     @GetMapping("health")
     public ResponseEntity checkHealth() {
@@ -68,9 +62,25 @@ public class QuestionBankController {
     public ResponseEntity<Question> persistQuestions(@RequestParam(value = "questionContentfile") MultipartFile questionContentfile,
                                                      @RequestParam(value = "scannedQuestionFile") MultipartFile scannedQuestionFile,
                                                      @RequestParam(value = "question") String question) throws IOException {
-        log.info("Persisting questions: {}");
+        log.info("Persisting questions:");
         Question questionResult = questionBankService.persistQuestion(objectMapper.readValue(question, Question.class), questionContentfile, scannedQuestionFile);
         return new ResponseEntity<>(questionResult, HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Endpoint to persist question.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Questions have been saved successfully"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @PostMapping(value = "questions/{questionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
+    public ResponseEntity<String> uploadQuestionImages(@PathVariable String questionId,
+                                                         @RequestParam(value = "questionContentFile") MultipartFile questionContentFile,
+                                                         @RequestParam(value = "scannedQuestionFile") MultipartFile scannedQuestionFile ) {
+        log.info("Request received to Saving images for question: {}", questionId);
+        Question question = questionBankService.findQuestionById(questionId);
+        questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile);
+        return new ResponseEntity<>("Question Images saved ", HttpStatus.CREATED);
     }
 
     /**
@@ -92,6 +102,36 @@ public class QuestionBankController {
         Question question = questionBankService.findQuestionById(questionId);
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
+
+
+    @ApiOperation(value = "Endpoint to find question by userid.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question as response."),
+            @ApiResponse(code = 500, message = "Internal Server Error."),
+            @ApiResponse(code = 404, message = "Question not found.")
+    })
+    @GetMapping("/questions/users/{userId}")
+    public ResponseEntity<List<Question>> findQuestionsByUserId(@PathVariable String userId) {
+        log.info("Searching question by userId : {}", userId);
+        List<Question> questions = questionBankSearchService.findQuestionsByUserId(userId);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Endpoint to parent questions by UserId.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question as response."),
+            @ApiResponse(code = 500, message = "Internal Server Error."),
+            @ApiResponse(code = 404, message = "Question not found.")
+    })
+    @GetMapping("/questions/parentquestion/users/{userId}")
+    public ResponseEntity<List<ParentQuestion>> findParentQuestionsByUserId(@PathVariable String userId) {
+        log.info("Searching question by userId : {}", userId);
+        List<ParentQuestion> parentQuestions = questionBankSearchService.findParentQuestionsByUserId(userId);
+        return new ResponseEntity<>(parentQuestions, HttpStatus.OK);
+    }
+
 
     @PostMapping("questions/question")
     public ResponseEntity<Question> postNewQuestion(@RequestBody Question questionRequest) {
@@ -126,7 +166,6 @@ public class QuestionBankController {
         return new ResponseEntity<>("Question marked as verified.", HttpStatus.OK);
     }
 
-
     /**
      *
      * @param questionId
@@ -156,6 +195,7 @@ public class QuestionBankController {
         List<Question> matchedQuestions = questionBankSearchService.searchQuestionsByClassId(searchQuestionRequest.getQuestionSearchQuery().getClassId());
         return new ResponseEntity<>(matchedQuestions, HttpStatus.OK);
     }
+
     /**
      *
      * @return

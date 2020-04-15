@@ -51,4 +51,9 @@ public class QuestionBankDaoImpl implements QuestionBankDao {
         log.debug("Searching question for classId [{}] ", classId);
         return questionBankRepository.findByClassId(classId);
     }
+
+    @Override
+    public List<QuestionEntity> findQuestionsByUserId(String userId) {
+        return questionBankRepository.findByQuestionStatusEntitySubmittedByUserId(userId);
+    }
 }
