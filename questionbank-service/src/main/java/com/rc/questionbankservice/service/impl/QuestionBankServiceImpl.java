@@ -72,7 +72,8 @@ public class QuestionBankServiceImpl implements QuestionBankService {
      * @param scannedQuestionFile
      * @return
      */
-    private void saveQuestionImages( String questionId, MultipartFile questionContentFile, MultipartFile scannedQuestionFile) {
+    @Override
+    public void saveQuestionImages( String questionId, MultipartFile questionContentFile, MultipartFile scannedQuestionFile) {
         log.debug("Saving images.");
         boolean found = false;
         ImageEntity imageEntity = new ImageEntity();

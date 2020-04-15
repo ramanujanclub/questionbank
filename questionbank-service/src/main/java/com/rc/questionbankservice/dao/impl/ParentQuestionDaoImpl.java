@@ -5,17 +5,24 @@ import com.rc.questionbankservice.entity.ParentQuestionEntity;
 import com.rc.questionbankservice.repository.ParentQuestionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class ParentQuestionDaoImpl implements ParentQuestionDao {
-    @Autowired
+
     private ParentQuestionRepository parentQuestionRepository;
+
     @Override
     public ParentQuestionEntity save(ParentQuestionEntity parentQuestionEntity) {
         return parentQuestionRepository.save(parentQuestionEntity);
+    }
+
+    @Override
+    public List<ParentQuestionEntity> findParentQuestionsByUserId(final String userId) {
+        return parentQuestionRepository.findByQuestionStatusEntitySubmittedByUserId(userId);
     }
 }

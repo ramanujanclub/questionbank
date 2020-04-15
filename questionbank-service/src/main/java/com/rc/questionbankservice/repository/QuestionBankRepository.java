@@ -8,8 +8,7 @@ import java.util.List;
 
 @Repository
 public interface QuestionBankRepository extends JpaRepository<QuestionEntity, String> {
-
     List<QuestionEntity> findByClassIdIn(List<Integer> classIds);
     List<QuestionEntity> findByClassId(long classIds);
-
+    List<QuestionEntity> findByQuestionStatusEntitySubmittedByUserId(String userId);
 }

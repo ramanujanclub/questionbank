@@ -14,5 +14,6 @@ public interface QuestionBankDao {
 
     List<QuestionEntity> findQuestionByClassIds(List<Integer> classIds);
     List<QuestionEntity> findAllQuestionsByClassId(long classIds);
+    List<QuestionEntity> findQuestionsByUserId(String userId);
 
 }
