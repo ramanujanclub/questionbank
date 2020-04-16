@@ -2,8 +2,10 @@ package com.rc.questionbankservice.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.domain.QuestionStatus;
+import com.rc.questionbankservice.entity.ParentQuestionEntity;
 import com.rc.questionbankservice.entity.QuestionEntity;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,6 +29,12 @@ public class QuestionBankUtils {
     public static void convertQuestionStatusEntityToQuestionStatus(QuestionEntity questionEntity, Question question) {
         QuestionStatus questionStatus = ModelMapperUtils.map(questionEntity.getQuestionStatusEntity(), QuestionStatus.class);
         question.setQuestionStatus(questionStatus);
+    }
+
+    public static void convertParentQuestionStatusEntityToQuestionStatus(ParentQuestionEntity questionEntity,
+                                                                         ParentQuestion parentQuestion) {
+        QuestionStatus questionStatus = ModelMapperUtils.map(questionEntity.getQuestionStatusEntity(), QuestionStatus.class);
+        parentQuestion.setQuestionStatus(questionStatus);
     }
 
     public static List<Integer> splitAndConvertToIntegerList(String value) {

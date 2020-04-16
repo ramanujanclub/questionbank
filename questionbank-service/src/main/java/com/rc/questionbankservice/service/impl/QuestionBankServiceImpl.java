@@ -58,7 +58,7 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         questionEntity.setQuestionStatusEntity(statusEntity);
 
         questionEntity = questionBankDao.save(questionEntity);
-        saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile);
+        saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile, false);
         Question savedQuestion = ModelMapperUtils.map(questionEntity, Question.class);
         QuestionBankUtils.convertQuestionStatusEntityToQuestionStatus(questionEntity, savedQuestion);
         log.info("Question Saved : " + questionEntity);
@@ -73,11 +73,16 @@ public class QuestionBankServiceImpl implements QuestionBankService {
      * @return
      */
     @Override
-    public void saveQuestionImages( String questionId, MultipartFile questionContentFile, MultipartFile scannedQuestionFile) {
+    public void saveQuestionImages( String questionId, MultipartFile questionContentFile,
+                                    MultipartFile scannedQuestionFile, Boolean isParentQuestion) {
         log.debug("Saving images.");
         boolean found = false;
         ImageEntity imageEntity = new ImageEntity();
-        imageEntity.setQuestionId(questionId);
+        if (isParentQuestion) {
+            imageEntity.setParentQuestionId(questionId);
+        } else {
+            imageEntity.setQuestionId(questionId);
+        }
 
         try {
             if (questionContentFile != null) {
@@ -98,6 +103,16 @@ public class QuestionBankServiceImpl implements QuestionBankService {
             throw new QuestionUploadImageException("Unable to save image", e);
         }
 
+    }
+
+    @Override
+    public ParentQuestion findParentQuestionById(String parentQuestionId) {
+        log.debug("Searching parent question by id : [{}]", parentQuestionId);
+        ParentQuestionEntity questionEntity = parentQuestionDao.findParentQuestionById(parentQuestionId);
+        ParentQuestion parentQuestion = ModelMapperUtils.map(questionEntity, ParentQuestion.class);
+        QuestionBankUtils.convertParentQuestionStatusEntityToQuestionStatus(questionEntity, parentQuestion);
+        log.info("Found question for questionId : [{}]", parentQuestionId);
+        return parentQuestion;
     }
 
     @Override

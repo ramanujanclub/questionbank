@@ -76,7 +76,7 @@ CREATE TABLE if NOT EXISTS question (
 );
 
 CREATE TABLE if NOT EXISTS image (
-  imageId varchar(45) NOT NULL,
+  imageid varchar(45) NOT NULL,
   questiondescriptionimage mediumblob,
   scannedquestionimage mediumblob,
   parentquestionimage mediumblob,

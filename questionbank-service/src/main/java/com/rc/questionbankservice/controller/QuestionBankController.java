@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,13 +74,29 @@ public class QuestionBankController {
             @ApiResponse(code = 200, message = "Questions have been saved successfully"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @PostMapping(value = "questions/{questionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
+    @PutMapping(value = "questions/{questionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
     public ResponseEntity<String> uploadQuestionImages(@PathVariable String questionId,
-                                                         @RequestParam(value = "questionContentFile") MultipartFile questionContentFile,
-                                                         @RequestParam(value = "scannedQuestionFile") MultipartFile scannedQuestionFile ) {
+                                                         @RequestParam(value = "questionContentFile", required = false) MultipartFile questionContentFile,
+                                                         @RequestParam(value = "scannedQuestionFile", required = false) MultipartFile scannedQuestionFile ) {
         log.info("Request received to Saving images for question: {}", questionId);
         Question question = questionBankService.findQuestionById(questionId);
-        questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile);
+        questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile, false);
+        return new ResponseEntity<>("Question Images saved ", HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Endpoint to persist question.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Questions have been saved successfully"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @PutMapping(value = "questions/parentquestion/{parentQuestionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
+    public ResponseEntity<String> uploadParentQuestionImages(@PathVariable String parentQuestionId,
+                                                       @RequestParam(value = "questionContentFile", required = false) MultipartFile questionContentFile,
+                                                       @RequestParam(value = "scannedQuestionFile", required = false) MultipartFile scannedQuestionFile ) {
+        log.info("Request received to Saving images for parentQuestionId: {}", parentQuestionId);
+        ParentQuestion parentQuestion = questionBankService.findParentQuestionById(parentQuestionId);
+        questionBankService.saveQuestionImages(parentQuestion.getParentQuestionId(), questionContentFile, scannedQuestionFile, true);
         return new ResponseEntity<>("Question Images saved ", HttpStatus.CREATED);
     }
 

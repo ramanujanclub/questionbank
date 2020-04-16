@@ -19,27 +19,28 @@ import javax.persistence.Lob;
 public class ImageEntity {
 
     @Id
+    @Column (name = "imageid")
     private String imageId;
 
-    @Column(name = "questionDescriptionImage", columnDefinition = "mediumblob")
+    @Column(name = "questiondescriptionimage", columnDefinition = "mediumblob")
     @Lob
     private byte[] questionDescriptionImage;
 
-    @Column(name = "scannedQuestionImage", columnDefinition = "mediumblob")
+    @Column(name = "scannedquestionimage", columnDefinition = "mediumblob")
     @Lob
     private byte[] scannedQuestionImage;
 
-    @Column(name = "questionHintImage", columnDefinition = "mediumblob")
+    @Column(name = "questionhintimage", columnDefinition = "mediumblob")
     @Lob
     private byte[] questionHintImage;
 
-    @Column(name = "parentQuestionImage", columnDefinition = "mediumblob")
+    @Column(name = "parentquestionimage", columnDefinition = "mediumblob")
     @Lob
     private byte[] parentQuestionImage;
 
-    @Column(name = "questionId")
+    @Column(name = "questionid")
     private String questionId;
 
-    @Column(name = "parentQuestionId")
+    @Column(name = "parentquestionid")
     private String parentQuestionId;
 }
