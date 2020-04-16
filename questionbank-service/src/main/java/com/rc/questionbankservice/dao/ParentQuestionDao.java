@@ -8,6 +8,7 @@ public interface ParentQuestionDao {
 
     ParentQuestionEntity save(ParentQuestionEntity parentQuestionEntity);
     List<ParentQuestionEntity> findParentQuestionsByUserId(String userId);
+    ParentQuestionEntity findParentQuestionById(String parentQuestionId);
 
 
 }
