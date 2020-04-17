@@ -34,10 +34,6 @@ public class ImageEntity {
     @Lob
     private byte[] questionHintImage;
 
-    @Column(name = "parentquestionimage", columnDefinition = "mediumblob")
-    @Lob
-    private byte[] parentQuestionImage;
-
     @Column(name = "questionid")
     private String questionId;
 
