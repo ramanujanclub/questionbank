@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -18,6 +20,21 @@ public class ImageDaoImpl implements ImageDao {
     public ImageEntity save(ImageEntity imageEntity) {
         log.info("Saving to database");
         return imageRepository.save(imageEntity);
+    }
+
+    @Override
+    public Optional<ImageEntity> findByParentQuestionId(String parentQuestionId) {
+        return imageRepository.findByParentQuestionId(parentQuestionId);
+    }
+
+    @Override
+    public Optional<ImageEntity> findByQuestionId(String questionId) {
+        return imageRepository.findByQuestionId(questionId);
+    }
+
+    @Override
+    public Optional<ImageEntity> findByQuestionIdOrParentQuestionId(String questionId, String parentQuestionId) {
+        return imageRepository.findByQuestionIdOrParentQuestionId(questionId, parentQuestionId);
     }
 
 

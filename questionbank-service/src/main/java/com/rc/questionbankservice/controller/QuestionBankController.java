@@ -2,6 +2,7 @@ package com.rc.questionbankservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rc.questionbankservice.domain.ApproveQuestionRequest;
+import com.rc.questionbankservice.domain.Image;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.domain.SearchQuestionRequest;
@@ -68,10 +69,10 @@ public class QuestionBankController {
         return new ResponseEntity<>(questionResult, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Endpoint to persist question.",
+    @ApiOperation(value = "Endpoint to add/update question images.",
             produces = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Questions have been saved successfully"),
+            @ApiResponse(code = 200, message = "Question images have been saved successfully"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PutMapping(value = "questions/{questionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
@@ -81,13 +82,13 @@ public class QuestionBankController {
         log.info("Request received to Saving images for question: {}", questionId);
         Question question = questionBankService.findQuestionById(questionId);
         questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile, false);
-        return new ResponseEntity<>("Question Images saved ", HttpStatus.CREATED);
+        return new ResponseEntity<>("Question Images saved ", HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Endpoint to persist question.",
+    @ApiOperation(value = "Endpoint to add/update parent question images.",
             produces = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Questions have been saved successfully"),
+            @ApiResponse(code = 200, message = "Question images have been saved successfully"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PutMapping(value = "questions/parentquestion/{parentQuestionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
@@ -97,9 +98,23 @@ public class QuestionBankController {
         log.info("Request received to Saving images for parentQuestionId: {}", parentQuestionId);
         ParentQuestion parentQuestion = questionBankService.findParentQuestionById(parentQuestionId);
         questionBankService.saveQuestionImages(parentQuestion.getParentQuestionId(), questionContentFile, scannedQuestionFile, true);
-        return new ResponseEntity<>("Question Images saved ", HttpStatus.CREATED);
+        return new ResponseEntity<>("Parent Question Images saved ", HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Endpoint to get question images.",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Question images returned"),
+            @ApiResponse(code = 404, message = "Question images not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @GetMapping("questions/{questionId}/images/")
+    public ResponseEntity<Image> getQuestionImages(@PathVariable String questionId) {
+        log.info("Request received to get question images");
+        Image questionImage = questionBankService.findImageByQuestionIdOrParentQuestionId(questionId, questionId);
+        log.info("Question image searching request completed for questionId : [{}]", questionId);
+        return new ResponseEntity<>(questionImage, HttpStatus.OK);
+    }
     /**
      *
      * @param questionId

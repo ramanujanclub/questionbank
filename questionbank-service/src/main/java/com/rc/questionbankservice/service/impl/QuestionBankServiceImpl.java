@@ -5,6 +5,7 @@ import com.rc.questionbankservice.dao.ParentQuestionDao;
 import com.rc.questionbankservice.dao.QuestionBankDao;
 import com.rc.questionbankservice.dao.QuestionStatusDao;
 import com.rc.questionbankservice.domain.ApproveQuestionRequest;
+import com.rc.questionbankservice.domain.Image;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.domain.VerifyQuestionRequest;
@@ -12,6 +13,7 @@ import com.rc.questionbankservice.entity.ImageEntity;
 import com.rc.questionbankservice.entity.ParentQuestionEntity;
 import com.rc.questionbankservice.entity.QuestionEntity;
 import com.rc.questionbankservice.entity.QuestionStatusEntity;
+import com.rc.questionbankservice.exception.QuestionImageNotFoundException;
 import com.rc.questionbankservice.exception.QuestionUploadImageException;
 import com.rc.questionbankservice.service.QuestionBankService;
 import com.rc.questionbankservice.util.ModelMapperUtils;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -77,11 +80,22 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                                     MultipartFile scannedQuestionFile, Boolean isParentQuestion) {
         log.debug("Saving images.");
         boolean found = false;
+        boolean newImageEntity = true;
         ImageEntity imageEntity = new ImageEntity();
         if (isParentQuestion) {
             imageEntity.setParentQuestionId(questionId);
+            Optional<ImageEntity> optionalImageEntity = imageDao.findByParentQuestionId(questionId);
+            if (optionalImageEntity.isPresent()) {
+                imageEntity = optionalImageEntity.get();
+                newImageEntity = false;
+            }
         } else {
             imageEntity.setQuestionId(questionId);
+            Optional<ImageEntity> optionalImageEntity = imageDao.findByQuestionId(questionId);
+            if (optionalImageEntity.isPresent()) {
+                imageEntity = optionalImageEntity.get();
+                newImageEntity = false;
+            }
         }
 
         try {
@@ -94,13 +108,16 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                 found = true;
             }
             if (found) {
-                imageEntity.setImageId(UUID.randomUUID().toString());
+                if (newImageEntity) {
+                    log.info("Saving new image for question Id [{}]", questionId);
+                    imageEntity.setImageId(UUID.randomUUID().toString());
+                }
                 imageEntity = imageDao.save(imageEntity);
                 log.info("Question image saved. QuestionId [{}] and imageId [{}]", questionId, imageEntity.getImageId());
             }
         } catch (IOException e) {
             log.error("Error while saving images. Error message: "+ e.getMessage());
-            throw new QuestionUploadImageException("Unable to save image", e);
+            throw new QuestionUploadImageException("Unable to save image, for questionId "+questionId, e);
         }
 
     }
@@ -113,6 +130,15 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         QuestionBankUtils.convertParentQuestionStatusEntityToQuestionStatus(questionEntity, parentQuestion);
         log.info("Found question for questionId : [{}]", parentQuestionId);
         return parentQuestion;
+    }
+
+    @Override
+    public Image findImageByQuestionIdOrParentQuestionId(String questionId, String parentQuestionId) {
+        Optional<ImageEntity> resultOptional = imageDao.findByQuestionIdOrParentQuestionId(questionId, parentQuestionId);
+        if (resultOptional.isPresent()) {
+            return ModelMapperUtils.map(resultOptional.get(), Image.class);
+        }
+        throw new QuestionImageNotFoundException("Question images not found.", questionId);
     }
 
     @Override

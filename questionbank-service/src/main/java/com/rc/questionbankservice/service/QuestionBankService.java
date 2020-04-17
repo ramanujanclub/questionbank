@@ -1,6 +1,7 @@
 package com.rc.questionbankservice.service;
 
 import com.rc.questionbankservice.domain.ApproveQuestionRequest;
+import com.rc.questionbankservice.domain.Image;
 import com.rc.questionbankservice.domain.ParentQuestion;
 import com.rc.questionbankservice.domain.Question;
 import com.rc.questionbankservice.domain.VerifyQuestionRequest;
@@ -19,5 +20,5 @@ public interface QuestionBankService {
     void saveQuestionImages( String questionId, MultipartFile questionContentFile,
                              MultipartFile scannedQuestionFile, Boolean isParentQuestion);
     ParentQuestion findParentQuestionById(final String parentQuestionId);
-
+    Image findImageByQuestionIdOrParentQuestionId(final String questionId, final String parentQuestionId);
 }
