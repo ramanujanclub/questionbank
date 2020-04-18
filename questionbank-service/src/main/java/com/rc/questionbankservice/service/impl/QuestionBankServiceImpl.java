@@ -61,7 +61,7 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         questionEntity.setQuestionStatusEntity(statusEntity);
 
         questionEntity = questionBankDao.save(questionEntity);
-        saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile, false);
+        saveQuestionImages(questionEntity.getQuestionId(), questionContentFile, scannedQuestionFile, null, false);
         Question savedQuestion = ModelMapperUtils.map(questionEntity, Question.class);
         QuestionBankUtils.convertQuestionStatusEntityToQuestionStatus(questionEntity, savedQuestion);
         log.info("Question Saved : " + questionEntity);
@@ -77,25 +77,16 @@ public class QuestionBankServiceImpl implements QuestionBankService {
      */
     @Override
     public void saveQuestionImages( String questionId, MultipartFile questionContentFile,
-                                    MultipartFile scannedQuestionFile, Boolean isParentQuestion) {
+                                    MultipartFile scannedQuestionFile,
+                                    MultipartFile questionHintAsImage,
+                                    Boolean isParentQuestion) {
         log.debug("Saving images.");
         boolean found = false;
-        boolean newImageEntity = true;
         ImageEntity imageEntity = new ImageEntity();
         if (isParentQuestion) {
             imageEntity.setParentQuestionId(questionId);
-            Optional<ImageEntity> optionalImageEntity = imageDao.findByParentQuestionId(questionId);
-            if (optionalImageEntity.isPresent()) {
-                imageEntity = optionalImageEntity.get();
-                newImageEntity = false;
-            }
         } else {
             imageEntity.setQuestionId(questionId);
-            Optional<ImageEntity> optionalImageEntity = imageDao.findByQuestionId(questionId);
-            if (optionalImageEntity.isPresent()) {
-                imageEntity = optionalImageEntity.get();
-                newImageEntity = false;
-            }
         }
 
         try {
@@ -107,17 +98,18 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                 imageEntity.setScannedQuestionImage(scannedQuestionFile.getBytes());
                 found = true;
             }
+            if (questionHintAsImage != null) {
+                imageEntity.setQuestionHintImage(questionHintAsImage.getBytes());
+                found = true;
+            }
             if (found) {
-                if (newImageEntity) {
-                    log.info("Saving new image for question Id [{}]", questionId);
-                    imageEntity.setImageId(UUID.randomUUID().toString());
-                }
+                imageEntity.setImageId(UUID.randomUUID().toString());
                 imageEntity = imageDao.save(imageEntity);
                 log.info("Question image saved. QuestionId [{}] and imageId [{}]", questionId, imageEntity.getImageId());
             }
         } catch (IOException e) {
             log.error("Error while saving images. Error message: "+ e.getMessage());
-            throw new QuestionUploadImageException("Unable to save image, for questionId "+questionId, e);
+            throw new QuestionUploadImageException("Unable to save image", e);
         }
 
     }

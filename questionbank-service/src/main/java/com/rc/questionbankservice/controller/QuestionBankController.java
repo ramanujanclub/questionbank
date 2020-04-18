@@ -77,11 +77,12 @@ public class QuestionBankController {
     })
     @PutMapping(value = "questions/{questionId}/images/upload", consumes = { "multipart/form-data", "application/json" })
     public ResponseEntity<String> uploadQuestionImages(@PathVariable String questionId,
-                                                         @RequestParam(value = "questionContentFile", required = false) MultipartFile questionContentFile,
-                                                         @RequestParam(value = "scannedQuestionFile", required = false) MultipartFile scannedQuestionFile ) {
+                                                       @RequestParam(value = "questionContentFile", required = false) MultipartFile questionContentFile,
+                                                       @RequestParam(value = "scannedQuestionFile", required = false) MultipartFile scannedQuestionFile,
+                                                       @RequestParam(value = "questionHintAsImage", required = false) MultipartFile questionHintAsImage ){
         log.info("Request received to Saving images for question: {}", questionId);
         Question question = questionBankService.findQuestionById(questionId);
-        questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile, false);
+        questionBankService.saveQuestionImages(question.getQuestionId(), questionContentFile, scannedQuestionFile, questionHintAsImage, false);
         return new ResponseEntity<>("Question Images saved ", HttpStatus.OK);
     }
 
@@ -97,7 +98,7 @@ public class QuestionBankController {
                                                        @RequestParam(value = "scannedQuestionFile", required = false) MultipartFile scannedQuestionFile ) {
         log.info("Request received to Saving images for parentQuestionId: {}", parentQuestionId);
         ParentQuestion parentQuestion = questionBankService.findParentQuestionById(parentQuestionId);
-        questionBankService.saveQuestionImages(parentQuestion.getParentQuestionId(), questionContentFile, scannedQuestionFile, true);
+        questionBankService.saveQuestionImages(parentQuestion.getParentQuestionId(), questionContentFile, scannedQuestionFile, null, true);
         return new ResponseEntity<>("Parent Question Images saved ", HttpStatus.OK);
     }
 

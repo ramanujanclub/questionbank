@@ -17,8 +17,11 @@ public interface QuestionBankService {
     ParentQuestion persistNewParentQuestion(ParentQuestion parentQuestion);
     void markQuestionAsVerified(final String questionId, VerifyQuestionRequest verifyQuestionRequest);
     void markQuestionAsApproved(final String questionId, ApproveQuestionRequest approveQuestionRequest);
-    void saveQuestionImages( String questionId, MultipartFile questionContentFile,
-                             MultipartFile scannedQuestionFile, Boolean isParentQuestion);
+    void saveQuestionImages(String questionId,
+                            MultipartFile questionContentFile,
+                            MultipartFile scannedQuestionFile,
+                            MultipartFile questionHintAsImage,
+                            Boolean isParentQuestion);
     ParentQuestion findParentQuestionById(final String parentQuestionId);
     Image findImageByQuestionIdOrParentQuestionId(final String questionId, final String parentQuestionId);
 }
